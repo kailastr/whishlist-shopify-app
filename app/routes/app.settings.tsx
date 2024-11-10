@@ -18,12 +18,14 @@ import { useState } from "react";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
 
+//import db
+import db from "../db.server";
+
 export async function loader() {
   // Data from database
-  let Settings = {
-    name: "My App",
-    description: "My app description",
-  }
+  let Settings = await db.setting.findFirst();
+
+  console.log('Settings:', Settings);
 
   return json({ Settings });
 }
@@ -46,6 +48,12 @@ export async function action({ request }: ActionFunctionArgs) {
 
   // Example: Here you would typically update your database with the new settings
   console.log("Received settings:", { name, description });
+
+  await db.setting.upsert({
+    where: { id: '1' },
+    create: { id: '1', name, description },
+    update: { name, description },
+  });
 
   // Return a JSON response with the updated settings data
   return json({ settings: { name, description } });
@@ -79,8 +87,8 @@ export default function SettingsPage() {
           <Card roundedAbove="sm">
             <Form method="post">
               <BlockStack gap="400">
-                <TextField label="App Name" name="name" autoComplete="off" value={(formState as { name: string }).name} onChange={(value) => setFormState({ ...formState, name: value })} />
-                <TextField label="Description" name="description" autoComplete="off" value={(formState as { description: string }).description} onChange={(value) => setFormState({ ...formState, description: value })} />
+                <TextField label="App Name" name="name" autoComplete="off" value={(formState as { name: string })?.name} onChange={(value) => setFormState({ ...formState, name: value })} />
+                <TextField label="Description" name="description" autoComplete="off" value={(formState as { description: string })?.description} onChange={(value) => setFormState({ ...formState, description: value })} />
                 <Button submit={true} variant="primary" >Save</Button>
               </BlockStack>
             </Form>
