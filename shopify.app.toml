@@ -1,0 +1,32 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "d0fbaec03efa1b071e1b438e37d42608"
+name = "whishlist-app"
+handle = "whishlist-app-6"
+application_url = "https://waiver-marilyn-terrorists-wc.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://waiver-marilyn-terrorists-wc.trycloudflare.com/auth/callback",
+  "https://waiver-marilyn-terrorists-wc.trycloudflare.com/auth/shopify/callback",
+  "https://waiver-marilyn-terrorists-wc.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-10"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+[pos]
+embedded = false
+
+[build]
+dev_store_url = "learning-developement.myshopify.com"
+automatically_update_urls_on_dev = true
